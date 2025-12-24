@@ -1,0 +1,103 @@
+:root {
+  --color-yellow: #fef08a;
+  --color-blue: #a1e3fd;
+  --color-pink: #fbcfe8;
+  --color-green: #a7f3d0;
+  --color-purple: #d8b4fe;
+  --color-peach: #fed7aa;
+}
+
+html,
+body,
+#menu-root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  font-family: sans-serif;
+}
+
+.menu-window {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  border: none;
+  outline: none;
+}
+
+.menu-window__colors {
+  display: flex;
+  gap: 6px;
+}
+
+.menu-window__color-swatch {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.menu-window__color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.menu-window__color-swatch--active {
+  border-color: #333;
+}
+
+.menu-window__color-swatch--yellow {
+  background-color: var(--color-yellow);
+}
+
+.menu-window__color-swatch--blue {
+  background-color: var(--color-blue);
+}
+
+.menu-window__color-swatch--pink {
+  background-color: var(--color-pink);
+}
+
+.menu-window__color-swatch--green {
+  background-color: var(--color-green);
+}
+
+.menu-window__color-swatch--purple {
+  background-color: var(--color-purple);
+}
+
+.menu-window__color-swatch--peach {
+  background-color: var(--color-peach);
+}
+
+.menu-window__delete {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  margin-left: auto;
+  padding-left: 6px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+.menu-window__delete:hover {
+  transform: scale(1.2);
+  color: #d32f2f;
+}

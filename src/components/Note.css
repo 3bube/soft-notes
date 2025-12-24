@@ -1,0 +1,467 @@
+:root {
+  --color-yellow: #fef08a;
+  --color-blue: #a1e3fd;
+  --color-pink: #fbcfe8;
+  --color-green: #a7f3d0;
+  --color-purple: #d8b4fe;
+  --color-peach: #fed7aa;
+}
+
+.note {
+  position: fixed;
+  border-radius: 15px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 1px 0 10px 12px;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f3f0;
+  transition: box-shadow 0.2s ease;
+  overflow: hidden;
+  border: none;
+  outline: none;
+}
+
+.note__header {
+  height: 10px;
+  /* background: black; */
+  user-select: none;
+  -webkit-app-region: drag;
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0;
+  margin: 0 -12px 0 -12px;
+  padding: 8px 12px;
+}
+
+.note__header:active {
+}
+
+.note__drag-handle {
+  height: 100%;
+  width: 100%;
+  -webkit-app-region: drag;
+}
+
+.note__menu-trigger {
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  margin: 20px 10px 10px 0;
+  padding: 0;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: opacity 0.2s ease;
+  -webkit-app-region: no-drag;
+  opacity: 0.6;
+  flex-shrink: 0;
+}
+
+.note__menu-trigger:hover {
+  opacity: 1;
+}
+
+.note__top-menu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  z-index: 50;
+}
+
+.note__menu-colors {
+  display: flex;
+  gap: 4px;
+  position: relative;
+}
+
+.note__color-swatch {
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.note__color-swatch:hover {
+  transform: scale(1.15);
+}
+
+.note__color-swatch--active {
+  border-color: #333;
+}
+
+.note__color-picker {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 8px;
+  z-index: 100;
+  background: white;
+  border-radius: 8px;
+  padding: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.note__menu-checkbox {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  margin-left: 4px;
+  padding-left: 4px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+  opacity: 0.5;
+}
+
+.note__menu-checkbox:hover {
+  transform: scale(1.2);
+  opacity: 1;
+}
+
+.note__menu-checkbox.active {
+  opacity: 1;
+}
+
+.note__menu-delete {
+  width: 20px;
+  height: 20px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+  margin-left: 4px;
+  padding-left: 4px;
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.note__menu-delete:hover {
+  transform: scale(1.2);
+}
+
+.note__title {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  font-weight: 550;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 12px 0 4px 0;
+  margin: 0 0 4px 0;
+  resize: none;
+}
+
+.note__title::placeholder {
+  color: #a0a0a0;
+  opacity: 0.7;
+}
+
+.note__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+.note__textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  resize: none;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+}
+
+.note__textarea::placeholder {
+  color: #a0a0a0;
+  opacity: 0.7;
+}
+
+.note__checkbox-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+}
+
+.note__checkbox-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.note__checkbox {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  margin-top: 2px;
+  cursor: pointer;
+  accent-color: currentColor;
+}
+
+.note__checkbox-text {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  color: inherit;
+  padding: 0;
+  resize: none;
+  overflow: hidden;
+}
+
+.note__checkbox-text.checked {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.note__text-line {
+  width: 100%;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  color: inherit;
+  padding: 0;
+  margin-bottom: 4px;
+  resize: none;
+}
+
+.note__footer {
+  margin-top: 8px;
+  padding: 8px;
+  align-self: flex-end;
+}
+
+.note__timestamp {
+  font-size: 2px;
+  color: #999;
+  user-select: none;
+  font-weight: 400;
+}
+
+.note--yellow {
+  background-color: var(--color-yellow);
+}
+
+.note--blue {
+  background-color: var(--color-blue);
+}
+
+.note--pink {
+  background-color: var(--color-pink);
+}
+
+.note--green {
+  background-color: var(--color-green);
+}
+
+.note--purple {
+  background-color: var(--color-purple);
+}
+
+.note--peach {
+  background-color: var(--color-peach);
+}
+
+.note--focused {
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.note__textarea {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  resize: none;
+  font-family: sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #3d3d3d;
+  overflow-y: auto;
+  padding: 0;
+  margin: 0;
+  user-select: text;
+}
+
+.note__textarea::placeholder {
+  color: #a0a0a0;
+  opacity: 0.7;
+}
+
+.note__textarea::-webkit-scrollbar {
+  width: 4px;
+}
+
+.note__textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.note__textarea::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 2px;
+}
+
+.note__textarea::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.note__footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 8px;
+  padding-top: 8px;
+  /* border-top: 1px solid rgba(0, 0, 0, 0.05); */
+  min-height: 20px;
+}
+
+.note__timestamp {
+  font-size: 11px;
+  color: #a0a0a0;
+  font-weight: 500;
+  user-select: none;
+}
+
+.note__controls {
+  display: flex;
+  gap: 4px;
+}
+
+.note__controls {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 4px;
+}
+
+.note__button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: background-color 0.2s ease;
+}
+
+.note__button:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.note__button--pin::before {
+  content: "📌";
+}
+
+.note__button--menu {
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px;
+}
+
+.control-panel {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 24px;
+  padding: 8px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.2s ease;
+  z-index: 1001;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.control-panel__colors {
+  display: flex;
+  gap: 6px;
+}
+
+.control-panel__swatch {
+  width: 20px;
+  height: 20px;
+  border: 2px solid transparent;
+  border-radius: 50%;
+  cursor: pointer;
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.control-panel__swatch:hover {
+  transform: scale(1.1);
+}
+
+.control-panel__swatch--active {
+  border-color: #333;
+}
+
+.control-panel__delete {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease;
+}
+
+.control-panel__delete:hover {
+  transform: scale(1.2);
+}
