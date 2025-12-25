@@ -123,6 +123,13 @@ fn get_note_window_position(app: AppHandle, note_id: String) -> Result<(f64, f64
     Ok((pos.x as f64, pos.y as f64, size.width as f64, size.height as f64))
 }
 
+#[tauri::command]
+fn debug_fetch_notes() -> Result<String, String> {
+    let conn = db::init_db()?;
+    let notes = db::fetch_all_notes(&conn)?;
+    Ok(format!("Found {} notes", notes.len()))
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     tauri::Builder::default()
@@ -134,7 +141,8 @@ pub fn run() {
             update_note,
             delete_note,
             show_menu_window,
-            get_note_window_position
+            get_note_window_position,
+            debug_fetch_notes
         ])
         .setup(|app| {
             // Set up system tray with menu
@@ -174,69 +182,81 @@ pub fn run() {
             let app_handle = app.handle().clone();
             
             // Load existing notes from database
-            let conn = db::init_db()?;
-            let notes = db::fetch_all_notes(&conn)
-                .unwrap_or_default();
-            
-            // Create windows for all notes
-            for note in &notes {
-                let window_label = format!("note-{}", note.id);
-                let _webview = WebviewWindowBuilder::new(
-                    &app_handle,
-                    &window_label,
-                    tauri::WebviewUrl::App("/index.html".into()),
-                )
-                .title("SoftNote")
-                .inner_size(note.width as f64, note.height as f64)
-                .min_inner_size(150.0, 80.0)
-                .max_inner_size(600.0, 800.0)
-                .position(note.x as f64, note.y as f64)
-                .decorations(false)
-                .resizable(true)
-                .transparent(true)
-                .shadow(false)
-                .disable_drag_drop_handler()
-                .build()?;
-            }
-            
-            // If no notes exist, create one initial note
-            if notes.is_empty() {
-                let note_id = Uuid::new_v4().to_string();
-                let window_label = format!("note-{}", note_id);
-                let now = Utc::now().to_rfc3339();
-                
-                let note = db::Note {
-                    id: note_id.clone(),
-                    title: String::new(),
-                    content: "Welcome to SoftNotes! Press Ctrl+Shift+N to create a new note.".to_string(),
-                    x: 100,
-                    y: 100,
-                    width: 230,
-                    height: 300,
-                    color: "yellow".to_string(),
-                    text_color: "#3d3d3d".to_string(),
-                    pinned: false,
-                    has_checkboxes: false,
-                    created_at: now.clone(),
-                    updated_at: now,
-                };
-                
-                db::insert_note(&conn, &note)?;
-                
-                let _webview = WebviewWindowBuilder::new(
-                    &app_handle,
-                    &window_label,
-                    tauri::WebviewUrl::App("/index.html".into()),
-                )
-                .title("SoftNote")
-                .inner_size(230.0, 300.0)
-                .min_inner_size(150.0, 80.0)
-                .max_inner_size(300.0, 400.0)
-                .position(100.0, 100.0)
-                .decorations(false)
-                .always_on_top(true)
-                .resizable(true)
-                .build()?;
+            match db::init_db() {
+                Ok(conn) => {
+                    match db::fetch_all_notes(&conn) {
+                        Ok(notes) => {
+                            // Create windows for all notes
+                            for note in &notes {
+                                let window_label = format!("note-{}", note.id);
+                                let _ = WebviewWindowBuilder::new(
+                                    &app_handle,
+                                    &window_label,
+                                    tauri::WebviewUrl::App("/index.html".into()),
+                                )
+                                .title("SoftNote")
+                                .inner_size(note.width as f64, note.height as f64)
+                                .min_inner_size(150.0, 80.0)
+                                .max_inner_size(600.0, 800.0)
+                                .position(note.x as f64, note.y as f64)
+                                .decorations(false)
+                                .resizable(true)
+                                .transparent(true)
+                                .shadow(false)
+                                .disable_drag_drop_handler()
+                                .build();
+                            }
+                            
+                            // If no notes exist, create one initial note
+                            if notes.is_empty() {
+                                let note_id = Uuid::new_v4().to_string();
+                                let window_label = format!("note-{}", note_id);
+                                let now = Utc::now().to_rfc3339();
+                                
+                                let note = db::Note {
+                                    id: note_id.clone(),
+                                    title: String::new(),
+                                    content: "Welcome to SoftNotes!".to_string(),
+                                    x: 100,
+                                    y: 100,
+                                    width: 230,
+                                    height: 300,
+                                    color: "yellow".to_string(),
+                                    text_color: "#3d3d3d".to_string(),
+                                    pinned: false,
+                                    has_checkboxes: false,
+                                    created_at: now.clone(),
+                                    updated_at: now,
+                                };
+                                
+                                let _ = db::insert_note(&conn, &note);
+                                
+                                let _ = WebviewWindowBuilder::new(
+                                    &app_handle,
+                                    &window_label,
+                                    tauri::WebviewUrl::App("/index.html".into()),
+                                )
+                                .title("SoftNote")
+                                .inner_size(230.0, 300.0)
+                                .min_inner_size(150.0, 80.0)
+                                .max_inner_size(600.0, 800.0)
+                                .position(100.0, 100.0)
+                                .decorations(false)
+                                .resizable(true)
+                                .transparent(true)
+                                .shadow(false)
+                                .disable_drag_drop_handler()
+                                .build();
+                            }
+                        }
+                        Err(e) => {
+                            eprintln!("Failed to fetch notes: {}", e);
+                        }
+                    }
+                }
+                Err(e) => {
+                    eprintln!("Failed to initialize database: {}", e);
+                }
             }
             
             Ok(())
